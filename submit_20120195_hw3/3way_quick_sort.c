@@ -3,7 +3,7 @@
  * - ./3way_quick_sort <input_file_name> <N>
  * - measure running time of '3-way Quick Sort'
  *
- * name / ID
+ * name / ID:  Yoon Hyowon / 20120195
   **/
 
 #include <stdio.h>

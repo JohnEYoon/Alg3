@@ -3,7 +3,7 @@
  * - ./basic_quick_sort <input_file_name> <N>
  * - measure running time of 'Quick Sort'
  *
- * name / ID
+ * name / ID Yoon Hyowon / 20120195
   **/
 
 #include <stdio.h>
@@ -13,21 +13,38 @@
 #include <unistd.h>
 
 
-void choose_pivot (int *data, unsigned int n) {
-	
-	/* your code here */
-	
+void choose_pivot (int *data, unsigned int n) { 
+   int temp;
+   int randIdx=rand()%n;//rand Idx: 1~(n-1)
+   temp=data[randIdx];
+   data[randidx]=data[0];
+   data[0]=temp;
 }
 
 unsigned long quick_sort (int *data, unsigned int n) {
     unsigned long cnt = (n - 1); // number of comparisons
-
 	/* your code here */
-
-	
+	int i, j;
+	int temp;
+	i=1;
     // choose pivot and  always place it at first element of array
     choose_pivot(data, n);
-
+    
+	for(j=1;i<n;j++){
+		if(data[1]<data[j]){
+			temp=data[i];
+			data[i]=data[j];
+			data[j]=temp;
+			i++;
+		}//swap
+	
+	temp=data[i-1];
+	data[i-1]=data[0];
+	data[0]=temp;
+	quick_sort=(data,n);
+	
+	quick_sort(data,);//front
+	quick_sort(data,);//back
 	
 	/* your code here */
 
