@@ -15,36 +15,41 @@
 
 void choose_pivot (int *data, unsigned int n) { 
    int temp;
-   int randIdx=rand()%n;//rand Idx: 1~(n-1)
+   int randIdx=rand()%n+start;//rand Idx: start~(n-1)
    temp=data[randIdx];
-   data[randidx]=data[0];
-   data[0]=temp;
+   data[randidx]=data[start];
+   data[start]=temp;
 }
 
 unsigned long quick_sort (int *data, unsigned int n) {
     unsigned long cnt = (n - 1); // number of comparisons
 	/* your code here */
+	int static start=0;
+	int end, temp;
 	int i, j;
-	int temp;
-	i=1;
+	end=start+n-1;
+	i=start+1;
     // choose pivot and  always place it at first element of array
-    choose_pivot(data, n);
+    if(n==1)
+		return cnt;
+	choose_pivot(data, n);
     
-	for(j=1;i<n;j++){
-		if(data[1]<data[j]){
+	for(j=start+1;j<=end;j++){
+		if(data[start]<data[j]){
 			temp=data[i];
 			data[i]=data[j];
 			data[j]=temp;
 			i++;
 		}//swap
+	}
 	
 	temp=data[i-1];
-	data[i-1]=data[0];
-	data[0]=temp;
-	quick_sort=(data,n);
+	data[i-1]=data[start];
+	data[start]=temp;
 	
-	quick_sort(data,);//front
-	quick_sort(data,);//back
+	quick_sort(data,i-start-1);//front
+	start=i;
+	quick_sort(data,end-i+1);//back
 	
 	/* your code here */
 
