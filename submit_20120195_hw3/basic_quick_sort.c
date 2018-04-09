@@ -84,15 +84,13 @@ int main (int argc, char* argv[]) {
 		puts("command line input error: check the input format");
 		return -1;
 	}//if : input is not in a number format
-	while(feof(src)==0){//&&&modify here:
+	while(EOF!=fscanf(src,"%d",&arr[idx])){//&&&modify here:
 		if(tempSize==idx){
 			tempSize+=1000000;
 			arr=(int*)realloc(arr,sizeof(int)*(tempSize));
 		}//if:file input is bigger than command line input
-		fscanf(src, "%d", &arr[idx]);
 		idx++;//&&&mod: final idx 
 	}
-	printf("idx: %d \n",idx); 
 	if(idx!=tempSize){
 		tempSize=idx;//actual size of the array;
 		arr=(int*)realloc(arr,sizeof(int)*tempSize);
@@ -109,8 +107,6 @@ int main (int argc, char* argv[]) {
 	printf("temp: %d\n", tempSize);
 	printf("size: %d\n", size);
 	/* your code here */
-
-	printf("%d\n", arr[0]);	
 	
 	// Please keep these printf statements!
     //printf("N = %7d,\tRunning_Time = %.3f ms\n", N, duration);
