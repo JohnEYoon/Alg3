@@ -14,47 +14,46 @@
 
 
 void choose_pivot (int *data, unsigned int n) { 
-   int temp;
-   int randIdx=rand()%n+start;//rand Idx: start~(n-1)
-   temp=data[randIdx];
-   data[randidx]=data[start];
-   data[start]=temp;
+   	int temp;
+	int *start=data;
+   	int *randIdx=start+rand()%n;//rand Idx: start~end
+  
+	temp=*randIdx;
+   	*randIdx=*start;
+   	*start=temp;
 }
 
 unsigned long quick_sort (int *data, unsigned int n) {
     unsigned long cnt = (n - 1); // number of comparisons
+	int *start,*end;
+	int *i,*j;
+	int temp;
 	/* your code here */
-	int static start=0;
-	int end, temp;
-	int i, j;
+	if(n<=1)
+		return cnt;
+	start=data;
 	end=start+n-1;
 	i=start+1;
+
     // choose pivot and  always place it at first element of array
-    if(n==1)
-		return cnt;
 	choose_pivot(data, n);
     
-<<<<<<< HEAD
-	for(j=1;j<n;j++){
-		if(data[1]<data[j]){
-=======
 	for(j=start+1;j<=end;j++){
-		if(data[start]<data[j]){
->>>>>>> f7ad0eaaf489286ddb280c1e50b4cacb4b17610a
-			temp=data[i];
-			data[i]=data[j];
-			data[j]=temp;
+		if(*start>*j){
+			temp=*i;
+			*i=*j;
+			*j=temp;
 			i++;
 		}//swap
 	}
 	
-	temp=data[i-1];
-	data[i-1]=data[start];
-	data[start]=temp;
+	temp=*(i-1);
+	*(i-1)=*start;
+	*start=temp;//pivot swap
 	
-	quick_sort(data,i-start-1);//front
-	start=i;
-	quick_sort(data,end-i+1);//back
+	quick_sort(data,(i-start-1));//front
+	data=i;//change start
+	quick_sort(data,(end-i+1));//back
 	
 	/* your code here */
 
@@ -65,26 +64,59 @@ unsigned long quick_sort (int *data, unsigned int n) {
 
 
 int main (int argc, char* argv[]) {
+	if(argc!=3){
+		puts("command line input error");
+		return -1;
+	}//command line input error
 
+	FILE *src=fopen(argv[1], "rt");//file directory, name
+	char *end;
+	int size=strtol(argv[2],&end,10);//size of array(input)+start idx
+	int tempSize=size;
+	int idx=0;//index: start of the array
+	int*arr=(int*)malloc(sizeof(int)*size);
+	if(src==NULL){
+		puts("error: failed to open the file");
+		return -1;
+	}//file open error
 
-
-
-
-	/* your code here */
-
-
-	/* your code here */
-
+	if(*end){
+		puts("command line input error: check the input format");
+		return -1;
+	}//if : input is not in a number format
+	while(feof(src)==0){//&&&modify here:
+		if(tempSize==idx){
+			tempSize+=1000000;
+			arr=(int*)realloc(arr,sizeof(int)*(tempSize));
+		}//if:file input is bigger than command line input
+		fscanf(src, "%d", &arr[idx]);
+		idx++;//&&&mod: final idx 
+	}
+	printf("idx: %d \n",idx); 
+	if(idx!=tempSize){
+		tempSize=idx;//actual size of the array;
+		arr=(int*)realloc(arr,sizeof(int)*tempSize);
+	}//realloc: final size of the array
+	quick_sort(arr, tempSize);
 	
-	/* your code here */
+	if(size>idx)//if: N>K
+		size=idx;
 	
+	arr=(int*)realloc(arr,sizeof(int)*size);	
+	for(idx=0;idx<size;idx++)
+		printf("%d\n", arr[idx]);
+	/* your code here */
+	printf("temp: %d\n", tempSize);
+	printf("size: %d\n", size);
+	/* your code here */
+
+	printf("%d\n", arr[0]);	
 	
 	// Please keep these printf statements!
-    printf("N = %7d,\tRunning_Time = %.3f ms\n", N, duration);
+    //printf("N = %7d,\tRunning_Time = %.3f ms\n", N, duration);
 
 	/* your code here */
-	
-		
+	free(arr);
+	fclose(src);
     return 0;
 }
-
