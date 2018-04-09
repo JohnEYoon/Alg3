@@ -30,7 +30,7 @@ unsigned long quick_sort (int *data, unsigned int n) {
     // choose pivot and  always place it at first element of array
     choose_pivot(data, n);
     
-	for(j=1;i<n;j++){
+	for(j=1;j<n;j++){
 		if(data[1]<data[j]){
 			temp=data[i];
 			data[i]=data[j];
