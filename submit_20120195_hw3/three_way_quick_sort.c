@@ -1,7 +1,7 @@
 /**
- * "Quick Sort"
- * - ./basic_quick_sort <input_file_name> <N>
- * - measure running time of 'Quick Sort'
+ * "three-way Quick Sort"
+ * - ./three_way__quick_sort <input_file_name> <N>
+ * - measure running time of 'three-way Quick Sort'
  *
  * name / ID Yoon Hyowon / 20120195
   **/
@@ -23,16 +23,17 @@ void choose_pivot (int *data, unsigned int n) {
    	*start=temp;
 }
 
-unsigned long quick_sort (int *data, unsigned int n) {
+unsigned long three_way_quick_sort (int *data, unsigned int n) {
     unsigned long cnt = (n - 1); // number of comparisons
 	int *start,*end;
-	int *i,*j;
+	int *i,*j,*s;
 	int temp;
 	/* your code here */
 	if(n<=1)
 		return cnt;
 	start=data;
 	end=start+n-1;
+	s=end;
 	i=start+1;
 
     // choose pivot and  always place it at first element of array
@@ -45,15 +46,27 @@ unsigned long quick_sort (int *data, unsigned int n) {
 			*j=temp;
 			i++;
 		}//swap
+		else if(*start==*j){
+			temp=*s;
+			*s=*j;
+			*j=temp;
+			s--;
+		}
 	}
 	
 	temp=*(i-1);
 	*(i-1)=*start;
 	*start=temp;//pivot swap
-	
-	quick_sort(data,(i-start-1));//front
+	if(s!=end){
+		for(s=s+1;s<=end;s++,i++){
+			temp=*i;
+			*i=*s;
+			*s=temp;
+		}
+	}
+	three_way_quick_sort(data,(i-start-1));//front
 	data=i;//change start
-	quick_sort(data,(end-i+1));//back
+	three_way_quick_sort(data,(end-i+1));//back
 	
     return cnt;
 }
@@ -92,7 +105,7 @@ int main (int argc, char* argv[]) {
 		tempSize=idx;//actual size of the array;
 		arr=(int*)realloc(arr,sizeof(int)*tempSize);
 	}//realloc: final size of the array
-	quick_sort(arr, tempSize);
+	three_way_quick_sort(arr, tempSize);
 	
 	if(size>idx)//if: N>K
 		size=idx;
