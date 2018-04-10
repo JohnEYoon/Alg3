@@ -29,8 +29,10 @@ unsigned long quick_sort (int *data, unsigned int n) {
 	int *i,*j;
 	int temp;
 	/* your code here */
+	
 	if(n<=1)
 		return cnt;
+	
 	start=data;
 	end=start+n-1;
 	i=start+1;
@@ -55,6 +57,9 @@ unsigned long quick_sort (int *data, unsigned int n) {
 	data=i;//change start
 	quick_sort(data,(end-i+1));//back
 	
+	/* your code here */
+
+	
     return cnt;
 }
 
@@ -68,10 +73,10 @@ int main (int argc, char* argv[]) {
 
 	FILE *src=fopen(argv[1], "rt");//file directory, name
 	char *end;
-	int size=strtol(argv[2],&end,10);//size of array(input)+start idx
-	int tempSize=size;
-	int idx=0;//index: start of the array
+	int size=strtol(argv[2],&end,10);//size of array(input)
+	int idx=0;
 	int*arr=(int*)malloc(sizeof(int)*size);
+
 	if(src==NULL){
 		puts("error: failed to open the file");
 		return -1;
@@ -80,28 +85,26 @@ int main (int argc, char* argv[]) {
 	if(*end){
 		puts("command line input error: check the input format");
 		return -1;
-	}//if : input is not in a number format
-	while(EOF!=fscanf(src,"%d",&arr[idx])){//&&&modify here:
-		if(tempSize==idx){
-			tempSize+=1000000;
-			arr=(int*)realloc(arr,sizeof(int)*(tempSize));
-		}//if:file input is bigger than command line input
-		idx++;//&&&mod: final idx 
+	}//not a number format
+
+	while(EOF!=fscanf(src,"%d",&arr[idx])){
+		if(size==idx){
+			break;
+		}//read the first N intergers
+		idx++;
 	}
-	if(idx!=tempSize){
-		tempSize=idx;//actual size of the array;
-		arr=(int*)realloc(arr,sizeof(int)*tempSize);
-	}//realloc: final size of the array
-	quick_sort(arr, tempSize);
+
+	if(idx!=size){
+		size=idx;//actual size of the array;
+		arr=(int*)realloc(arr,sizeof(int)*size);
+	}
 	
-	if(size>idx)//if: N>K
-		size=idx;
-	
-	arr=(int*)realloc(arr,sizeof(int)*size);	
+	//time
+	quick_sort(arr, size);
+	//time	
+
 	for(idx=0;idx<size;idx++)
 		printf("%d\n", arr[idx]);
-	
-	printf("temp: %d\n", tempSize);
 	printf("size: %d\n", size);
 	
 	// Please keep these printf statements!
@@ -109,5 +112,6 @@ int main (int argc, char* argv[]) {
 
 	free(arr);
 	fclose(src);
+
     return 0;
 }
