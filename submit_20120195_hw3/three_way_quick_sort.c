@@ -57,14 +57,16 @@ unsigned long three_way_quick_sort (int *data, unsigned int n) {
 	temp=*(i-1);
 	*(i-1)=*start;
 	*start=temp;//pivot swap
+
+	three_way_quick_sort(data,(i-start-1));//front
 	if(s!=end){
-		for(s=s+1;s<=end;s++,i++){
+		for(s=s+1;s<=end;s++){
 			temp=*i;
 			*i=*s;
 			*s=temp;
+			i++;
 		}
-	}
-	three_way_quick_sort(data,(i-start-1));//front
+	}//middle
 	data=i;//change start
 	three_way_quick_sort(data,(end-i+1));//back
 	
@@ -82,9 +84,9 @@ int main (int argc, char* argv[]) {
 	FILE *src=fopen(argv[1], "rt");//file directory, name
 	char *end;
 	int size=strtol(argv[2],&end,10);//size of array(input)+start idx
-	int tempSize=size;
 	int idx=0;//index: start of the array
 	int*arr=(int*)malloc(sizeof(int)*size);
+
 	if(src==NULL){
 		puts("error: failed to open the file");
 		return -1;
@@ -94,27 +96,25 @@ int main (int argc, char* argv[]) {
 		puts("command line input error: check the input format");
 		return -1;
 	}//if : input is not in a number format
-	while(EOF!=fscanf(src,"%d",&arr[idx])){//&&&modify here:
-		if(tempSize==idx){
-			tempSize+=1000000;
-			arr=(int*)realloc(arr,sizeof(int)*(tempSize));
-		}//if:file input is bigger than command line input
-		idx++;//&&&mod: final idx 
+
+	while(EOF!=fscanf(src,"%d",&arr[idx])){
+		if(size==idx){
+			break;
+		}//read the first N integers
+		idx++;
 	}
-	if(idx!=tempSize){
-		tempSize=idx;//actual size of the array;
-		arr=(int*)realloc(arr,sizeof(int)*tempSize);
-	}//realloc: final size of the array
-	three_way_quick_sort(arr, tempSize);
-	
-	if(size>idx)//if: N>K
-		size=idx;
-	
-	arr=(int*)realloc(arr,sizeof(int)*size);	
+
+	if(idx!=size){
+		size=idx;//actual size of the array;
+		arr=(int*)realloc(arr,sizeof(int)*size);
+	}
+	//time
+	three_way_quick_sort(arr,size);
+	//time
+
 	for(idx=0;idx<size;idx++)
 		printf("%d\n", arr[idx]);
 	
-	printf("temp: %d\n", tempSize);
 	printf("size: %d\n", size);
 	
 	// Please keep these printf statements!
