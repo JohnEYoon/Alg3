@@ -33,46 +33,68 @@ unsigned long three_way_quick_sort (int *data, unsigned int n) {
 		return cnt;
 	start=data;
 	end=start+n-1;
-	s=end;
 	i=start+1;
+ 	s=end;
 
     // choose pivot and  always place it at first element of array
 	choose_pivot(data, n);
-    
-	for(j=start+1;j<=end;j++){
+	
+	while(*s==*start&&s==start+1){//if *s equal to pivot
+		s--;
+	}
+
+	for(j=start+1;j<=s;j++){
+	
+		if(*start==*j){
+			temp=*s;
+			*s=*j;
+			*j=temp;
+			s--;
+			if(s<data)
+				puts("error");
+		}
+	
 		if(*start>*j){
 			temp=*i;
 			*i=*j;
 			*j=temp;
 			i++;
 		}//swap
-		else if(*start==*j){
-			temp=*s;
-			*s=*j;
-			*j=temp;
-			s--;
-		}
 	}
-	
 	temp=*(i-1);
 	*(i-1)=*start;
 	*start=temp;//pivot swap
-
+//	printf("pivot: %d=",*(i-1)); 
+	//puts("no prob before sort");
+	//if(s==end)
+	//	puts("no duplicate");
 	three_way_quick_sort(data,(i-start-1));//front
+	//printf("pivot: %d,%d: ", *start,*data);
+	//puts("no prob after first part");
 	if(s!=end){
+	//	puts("start mid");
 		for(s=s+1;s<=end;s++){
 			temp=*i;
 			*i=*s;
 			*s=temp;
 			i++;
+		//	printf(" %d, ",*(i-1));
 		}
+		if(i>end)
+			puts("smthing wrong");
+		//printf("\n%d", cc);
 	}//middle
+	//puts("no prob after mid");
 	data=i;//change start
-	three_way_quick_sort(data,(end-i+1));//back
-	
+//	puts("no prob after allocation");
+	if(i>end){
+		puts("error");
+		return cnt;}
+	three_way_quick_sort(data,(end-i+1));//back	
+//	puts("not prob after back sort");
     return cnt;
+	
 }
-
 
 
 int main (int argc, char* argv[]) {
@@ -103,7 +125,7 @@ int main (int argc, char* argv[]) {
 		}//read the first N integers
 		idx++;
 	}
-
+	
 	if(idx!=size){
 		size=idx;//actual size of the array;
 		arr=(int*)realloc(arr,sizeof(int)*size);
@@ -124,3 +146,4 @@ int main (int argc, char* argv[]) {
 	fclose(src);
     return 0;
 }
+
