@@ -11,7 +11,7 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-
+#include <time.h>
 
 void choose_pivot (int *data, unsigned int n) { 
    	int temp;
@@ -28,7 +28,7 @@ unsigned long three_way_quick_sort (int *data, unsigned int n) {
 	int *start,*end;
 	int *i,*j,*s;
 	int temp;
-	/* your code here */
+
 	if(n<=1)
 		return cnt;
 	start=data;
@@ -39,21 +39,16 @@ unsigned long three_way_quick_sort (int *data, unsigned int n) {
     // choose pivot and  always place it at first element of array
 	choose_pivot(data, n);
 	
-	while(*s==*start&&s==start+1){//if *s equal to pivot
+	while(*s==*start&&s==start+1)//if *s equal to pivot
 		s--;
-	}
 
 	for(j=start+1;j<=s;j++){
-	
 		if(*start==*j){
 			temp=*s;
 			*s=*j;
 			*j=temp;
 			s--;
-			if(s<data)
-				puts("error");
 		}
-	
 		if(*start>*j){
 			temp=*i;
 			*i=*j;
@@ -64,34 +59,21 @@ unsigned long three_way_quick_sort (int *data, unsigned int n) {
 	temp=*(i-1);
 	*(i-1)=*start;
 	*start=temp;//pivot swap
-//	printf("pivot: %d=",*(i-1)); 
-	//puts("no prob before sort");
-	//if(s==end)
-	//	puts("no duplicate");
+	
 	three_way_quick_sort(data,(i-start-1));//front
-	//printf("pivot: %d,%d: ", *start,*data);
-	//puts("no prob after first part");
+
 	if(s!=end){
-	//	puts("start mid");
 		for(s=s+1;s<=end;s++){
 			temp=*i;
 			*i=*s;
 			*s=temp;
 			i++;
-		//	printf(" %d, ",*(i-1));
 		}
-		if(i>end)
-			puts("smthing wrong");
-		//printf("\n%d", cc);
 	}//middle
-	//puts("no prob after mid");
+	
 	data=i;//change start
-//	puts("no prob after allocation");
-	if(i>end){
-		puts("error");
-		return cnt;}
+	
 	three_way_quick_sort(data,(end-i+1));//back	
-//	puts("not prob after back sort");
     return cnt;
 	
 }
@@ -102,13 +84,16 @@ int main (int argc, char* argv[]) {
 		puts("command line input error");
 		return -1;
 	}//command line input error
-
+	
 	FILE *src=fopen(argv[1], "rt");//file directory, name
 	char *end;
 	int size=strtol(argv[2],&end,10);//size of array(input)+start idx
 	int idx=0;//index: start of the array
 	int*arr=(int*)malloc(sizeof(int)*size);
-
+	int check;
+	int N;
+	double duration;
+	
 	if(src==NULL){
 		puts("error: failed to open the file");
 		return -1;
@@ -130,17 +115,22 @@ int main (int argc, char* argv[]) {
 		size=idx;//actual size of the array;
 		arr=(int*)realloc(arr,sizeof(int)*size);
 	}
-	//time
+	N=idx;
+	duration=clock();
 	three_way_quick_sort(arr,size);
-	//time
-
-	for(idx=0;idx<size;idx++)
+	duration=clock()-duration;
+	check=arr[0];
+	for(idx=0;idx<size;idx++){
 		printf("%d\n", arr[idx]);
+		if(check>arr[idx]){
+			puts("not sorted");
+			break;}//if not sorted
+		check=arr[idx];
+	}
 	
-	printf("size: %d\n", size);
 	
 	// Please keep these printf statements!
-    //printf("N = %7d,\tRunning_Time = %.3f ms\n", N, duration);
+    printf("N = %7d,\tRunning_Time = %.3f ms\n", N, duration);
 
 	free(arr);
 	fclose(src);

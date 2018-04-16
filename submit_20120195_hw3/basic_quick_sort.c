@@ -11,7 +11,7 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-
+#include <sys/time.h>
 
 void choose_pivot (int *data, unsigned int n) { 
    	int temp;
@@ -57,9 +57,6 @@ unsigned long quick_sort (int *data, unsigned int n) {
 	data=i;//change start
 	quick_sort(data,(end-i+1));//back
 	
-	/* your code here */
-
-	
     return cnt;
 }
 
@@ -76,6 +73,9 @@ int main (int argc, char* argv[]) {
 	int size=strtol(argv[2],&end,10);//size of array(input)
 	int idx=0;
 	int*arr=(int*)malloc(sizeof(int)*size);
+	int check;
+	int N;
+	double duration;
 
 	if(src==NULL){
 		puts("error: failed to open the file");
@@ -98,17 +98,20 @@ int main (int argc, char* argv[]) {
 		size=idx;//actual size of the array;
 		arr=(int*)realloc(arr,sizeof(int)*size);
 	}
-	
-	//time
+	N=idx;	
+	duration=timeGetTime();
 	quick_sort(arr, size);
-	//time	
-
-	for(idx=0;idx<size;idx++)
+	duration=timeGetTime()-duration;	
+	check=arr[0];
+	for(idx=0;idx<size;idx++){
 		printf("%d\n", arr[idx]);
-	printf("size: %d\n", size);
-	
+		if(check>arr[idx]){
+			puts("not sorted");
+			break;}//if not sorted
+		check=arr[idx];
+	}
 	// Please keep these printf statements!
-    //printf("N = %7d,\tRunning_Time = %.3f ms\n", N, duration);
+    printf("N = %7d,\tRunning_Time = %.3f ms\n", N, duration);
 
 	free(arr);
 	fclose(src);
